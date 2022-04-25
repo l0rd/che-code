@@ -28,10 +28,12 @@ if ! grep -Fq "${USER_ID}" /etc/passwd; then
     sed "s/\${HOME}/\/che-vscode/g" > /etc/group
 fi
 
+ARGS=${VSCODE_SERVER_ARGS:-"--port 3100"}
+
 # detect if we're using alpine/musl
 libc=$(ldd /bin/ls | grep 'musl' | head -1 | cut -d ' ' -f1)
 if [ -n "$libc" ]; then
-    /checode-linux-musl/node /checode-linux-musl/out/server-main.js --port 3100
+    /checode-linux-musl/node /checode-linux-musl/out/server-main.js "${ARGS}"
 else
-    /checode-linux-libc/node /checode-linux-libc/out/server-main.js --port 3100
+    /checode-linux-libc/node /checode-linux-libc/out/server-main.js "${ARGS}"
 fi
